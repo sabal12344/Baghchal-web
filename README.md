@@ -1,5 +1,5 @@
 # Baghchal-web
-tiger and goats
+tigers and goats
 
 
 (under construction)
