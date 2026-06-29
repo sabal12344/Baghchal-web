@@ -1,15 +1,24 @@
 
 
-let goatLeft =20;
+export let goatleft =20;
 
+export function decreGoatleft(){
+    goatleft--;
+}
 
-function piece(name,emoji){
+export let tigerTurn = false;
+
+export function switchTurn(){
+    tigerTurn = !tigerTurn;
+}
+
+export function piece(name,emoji){
     return {name,emoji};
 
 }
 
-function space(piece,closed){
-    return  {piece,closed};
+function space(piece,closed,row,col){
+    return  {piece,closed,row,col};
 }
 
 function row(n){
@@ -27,7 +36,7 @@ function row(n){
             
         }
 
-        rows.push(space(mypiece,closed));
+        rows.push(space(mypiece,closed,n,i));
 
 
 
@@ -42,7 +51,7 @@ function row(n){
 
 
 
-export function startBoard(){
+ function starttBoard(){
     const board=[];
     for(let i=0; i<5;i++){
         board.push(row(i));
@@ -50,6 +59,7 @@ export function startBoard(){
     return board;
 }
 
+export const startBoard = starttBoard();
 
 
 
