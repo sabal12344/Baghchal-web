@@ -1,6 +1,6 @@
 
-import {startBoard,tigerTurn,switchTurn,piece} from "./data.js";
-import{emptySpace,insertPiece} from "./ui.js";
+import {startBoard,tigerTurn,switchTurn,piece,goatkill,killGoat, goatleft} from "./data.js";
+import{emptySpace,insertPiece,updateStats} from "./ui.js";
 
 
 const flatBoard = startBoard.flat();
@@ -182,12 +182,19 @@ function goatPossibleSpaces(row, col){
 }
 
 export function makeTigerMove(sourceid,destid){
+
+
+
+    
        
     const srow = Math.floor(sourceid/5);
     const scol = sourceid % 5;
     const drow = Math.floor(destid/5);
     const dcol = destid % 5;
-    
+
+
+
+
 
 
 
@@ -205,6 +212,12 @@ export function makeTigerMove(sourceid,destid){
 
     if(capture){
 
+        killGoat();
+      
+
+
+        //thado logic
+
         if(scol==dcol)
         {
             if(srow<drow){
@@ -220,6 +233,8 @@ export function makeTigerMove(sourceid,destid){
 
         }
 
+        //terso logic
+
         if(srow == drow){
             if(scol<dcol){
                 startBoard[srow][scol+1].piece=null;
@@ -234,11 +249,44 @@ export function makeTigerMove(sourceid,destid){
 
             }
         }
-        startBoard[srow][scol].piece=null;
-        emptySpace(srow*5+scol);
-        startBoard[drow][dcol].piece = piece("tiger","🐯");
-        insertPiece(drow*5+dcol, "🐯");
-        switchTurn();
+
+        //xadke logic
+        
+        if(Math.abs(srow-drow)==2 && Math.abs(scol-dcol)==2){
+
+            if(srow>drow && scol>dcol){
+                startBoard[srow-1][scol-1].piece = null;
+                emptySpace((srow-1)*5+scol-1);
+
+            }
+
+            if(srow<drow && scol<dcol){
+                startBoard[srow+1][scol+1].piece = null;
+                emptySpace((srow+1)*5+scol+1);
+                
+
+            }
+
+            if(srow<drow && scol>dcol){
+                startBoard[srow+1][scol-1].piece = null;
+                emptySpace((srow+1)*5+scol-1);
+
+            }
+
+            if(srow>drow && scol<dcol){
+                startBoard[srow-1][scol+1].piece = null;
+                emptySpace((srow-1)*5+scol+1);
+
+            }
+
+
+        }
+
+        if(goatkill>=5){
+    alert("the game is over, tigers won!!");
+    window.location.reload();
+}
+        
 
         
 
@@ -246,8 +294,80 @@ export function makeTigerMove(sourceid,destid){
 
     }    
 
+ 
+    startBoard[srow][scol].piece=null;
+        emptySpace(srow*5+scol);
+        startBoard[drow][dcol].piece = piece("tiger","🐯");
+        insertPiece(drow*5+dcol, "🐯");
+        switchTurn();
+          updateStats();
+
 
     
+
+
+}
+
+export function isTrapped(){
+
+    
+
+    let trapped = true;
+
+for(const e of flatBoard){
+
+    
+
+    
+    if(e.piece&&e.piece.name==="tiger"){
+        if(tigerPossibleSpaces(e.row,e.col).length>0){
+            trapped = false;  
+            break;
+
+        }              
+        
+    }
+
+}
+console.log(trapped);
+return trapped;
+
+
+}
+
+export function makeGoatMove(sourceid, destid){
+
+    if(goatleft>0)
+        return;
+
+    
+
+    const srow = Math.floor(sourceid/5);
+    const scol = sourceid % 5;
+    const drow = Math.floor(destid/5);
+    const dcol = destid % 5;
+
+     if(!possibleSpaces(srow,scol).includes(startBoard[drow][dcol]))
+        return;
+
+
+
+
+
+
+
+
+     startBoard[srow][scol].piece=null;
+        emptySpace(srow*5+scol);
+        startBoard[drow][dcol].piece = piece("goat","🐐");
+        insertPiece(drow*5+dcol, "🐐");
+        switchTurn();
+          updateStats();
+
+          if(isTrapped()){
+        alert("The tigers are trapped. Goats wonn");
+        window.location.reload();
+    }
 
 
 }
