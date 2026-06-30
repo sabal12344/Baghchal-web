@@ -6,6 +6,12 @@ export function decreGoatleft(){
     goatleft--;
 }
 
+export let goatkill = 0;
+
+export function killGoat(){
+    goatkill++;
+}
+
 export let tigerTurn = false;
 
 export function switchTurn(){
@@ -36,14 +42,7 @@ function row(n){
             
         }
 
-        rows.push(space(mypiece,closed,n,i));
-
-
-
-        
-
-
-
+        rows.push(space(mypiece,closed,n,i));     
 
     }
     return rows;
@@ -60,7 +59,3 @@ function row(n){
 }
 
 export const startBoard = starttBoard();
-
-
-
-
